@@ -1,0 +1,35 @@
+<%- include('./header')-%>
+
+    <body>
+        <div class="container mt-3">
+            <div class="jumbotron">
+                <h1 style="color:black mt-3;"></h1>
+                <h2 style="color:black mt-3;">Registro de usuario</h2>
+
+                <div class="form-group">
+                    <label for="nameUsuario" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nameUsuario" name="nameUsuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="usernameUsuario" class="form-label">Usuario:</label>
+                    <input type="email" class="form-control" id="usernameUsuario" aria-describedby="emailHelp"
+                        name="usernameUsuario" required>
+                </div>
+|
+                <div class="form-group">
+                    <label for="passwordUsuario" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="passwordUsuario" name="passwordUsuario" required>
+                </div>
+
+
+
+                <button class="btn btn-primary mt-3 mb-5" id="registrarUsuario">Registrar</button>
+
+                <button class="btn btn-outline-secondary mt-3 mb-5" id="btn-inicio-sesion">Iniciar Sesión</button>
+            </div>
+        </div>
+        <script src="./javascript/registrar-usuario.js"></script> 
+    </body>
+
+    <%- include('./pie')-%>

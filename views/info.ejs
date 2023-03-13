@@ -1,0 +1,29 @@
+<% if(info) { %>
+    <div class="container mt-3">
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Path:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.path%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Nombre sistema operativo:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.plataforma%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Id del proceso:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.pid%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Versión Node:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.version%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Carpeta:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.carpeta%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Memoria(rss):</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.memoria%></p>
+        </div>
+        
+    </div>
+<% } %> 
