@@ -6,16 +6,14 @@ const { StatusCodes } = require('http-status-codes')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const path = require('path')
+const {fork} = require('child_process');
 
 
 const { conectDB } = require('./conectDB/conectDB')
 const { getUserModel } = require('./model/modelUsuario')
 const { verificarCampoRequerido } = require('./verify/verifyCampo')
 const { verifyToken } = require('./verify/verifyToken');
-const { getInfoModel } = require('./model/modelinfo');
-const { memoryUsage } = require('process');
-const { info } = require('console');
-
+ 
 class WebError extends Error {
     constructor (
         message,
@@ -61,14 +59,26 @@ const main = async () => {
             memoria: process.memoryUsage.rss()
         }
                 
-        console.log({serverInfo});
-
         res.render('mostrar-info', {
             info: serverInfo
         });
     })
 
     
+    app.get('/api/random', (req, res) =>{
+        
+        const dataFork = fork('./child/fork.js')
+        dataFork.send('start');
+        dataFork.on('message', msg => {
+            console.log(msg);
+            return mensaje = msg
+        })
+    
+        res.render('mostrar-random', {
+            mensaje
+        } )
+
+})    
     
     
     app.post('/user', async (req, res) => {
