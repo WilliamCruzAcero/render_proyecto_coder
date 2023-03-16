@@ -1,16 +1,13 @@
  
+function funcionRandom(min, max) {
+  min = Math.ceil(1);
+  max = Math.floor(1000);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
- function calcular() {
-     let suma = 0;
-
-     for (let i = 0; i < 6e9; i++){
-        suma += i;
-     }
-     return suma;
- }
  process.on('message', msg => {
-    console.log('Mensaje del padre', msg)
-    const suma = calcular();
-    process.send(suma); 
+   
+    const numRandom = funcionRandom();
+    process.send(numRandom); 
 
- }) 
+ })

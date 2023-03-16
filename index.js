@@ -1,12 +1,12 @@
 // importar dependencias
 require('dotenv').config();
+const {fork} = require('child_process');
 const mongoose = require('mongoose')
 const express = require('express')
 const { StatusCodes } = require('http-status-codes')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const path = require('path')
-const {fork} = require('child_process');
 
 
 const { conectDB } = require('./conectDB/conectDB')
@@ -63,22 +63,22 @@ const main = async () => {
             info: serverInfo
         });
     })
-
-    
+            
     app.get('/api/random', (req, res) =>{
+
         
         const dataFork = fork('./child/fork.js')
         dataFork.send('start');
         dataFork.on('message', msg => {
-            console.log(msg);
-            return mensaje = msg
+            
+             let random = msg
+             res.render('mostrar-random', {
+                random
+            
+             });
+            
         })
-    
-        res.render('mostrar-random', {
-            mensaje
-        } )
-
-})    
+    })        
     
     
     app.post('/user', async (req, res) => {
