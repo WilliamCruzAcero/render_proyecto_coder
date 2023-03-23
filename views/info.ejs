@@ -1,4 +1,4 @@
-<% if(info) { %>
+<% if(info, numNucleos ) { %>
     <div class="container mt-3">
         <div class="col-8 d-flex  flex-row align-items-start">
             <h6 class="p-2">Path:</h6>
@@ -23,6 +23,10 @@
         <div class="col-8 d-flex  flex-row align-items-start">
             <h6 class="p-2">Memoria(rss):</h6>
             <p class="p-2" style="font-size: 1em; font-style: italic;"><%=info.memoria%></p>
+        </div>
+        <div class="col-8 d-flex  flex-row align-items-start">
+            <h6 class="p-2">Numero Nucleos:</h6>
+            <p class="p-2" style="font-size: 1em; font-style: italic;"><%=numNucleos%></p>
         </div>
         
     </div>
