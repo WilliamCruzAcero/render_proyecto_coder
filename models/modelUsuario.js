@@ -19,4 +19,6 @@ const getUserModel = () => {
 
 }
 
-module.exports = getUserModel
+module.exports = {
+    getUserModel
+}

@@ -3,7 +3,7 @@ loginButton.addEventListener("click", obtenerToken);
 
 async function obtenerToken() {
 
-    const url = "http://localhost:8080/login";
+    const url = "/login";
     const userElement = document.getElementById('username');
     const passwordElement = document.getElementById('password');
     const username = userElement.value;
@@ -38,6 +38,6 @@ async function obtenerToken() {
 document.getElementById("btn").addEventListener("click", irRegistro)
 
 function irRegistro() {
-    window.location = "/registrarUsuario"
+    window.location = "/user"
 
 }

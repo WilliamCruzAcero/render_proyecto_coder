@@ -4,7 +4,7 @@ registrarUsuario.addEventListener("click", guardarUsuario)
 
 
 async function guardarUsuario() {
-    const url = "http://localhost:8080/user";
+    const url = "/user";
     const datoIngresado = {
         name: document.getElementById('nameUsuario').value,
         username: document.getElementById('usernameUsuario').value,

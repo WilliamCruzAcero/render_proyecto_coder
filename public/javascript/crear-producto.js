@@ -3,7 +3,7 @@ createButton.addEventListener("click", crearProducto);
 
 async function crearProducto() {
 
-    const url = "http://localhost:8080/productos";       
+    const url = "/productos";       
     const nombreElement = document.getElementById('nombre');
     const nombre = nombreElement.value;    
     
