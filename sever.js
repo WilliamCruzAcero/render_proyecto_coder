@@ -14,8 +14,14 @@ const { conectDB } = require('./conectDB/conectDB')
 const { getUserModel } = require('./models/modelUsuario')
 const { verificarCampoRequerido } = require('./verify/verifyCampo')
 const { verifyToken } = require('./verify/verifyToken');
+const { loggerProd, loggerDev } = require('./logger');
 
 const secret = process.env.SECRET;
+const NODE_ENV = process.env.NODE_ENV || 'development'
+const logger = NODE_ENV === 'production'
+            ? loggerProd
+            : loggerDev;
+
 
 class Server {
 
@@ -24,13 +30,15 @@ class Server {
         this.port = port;
         this.vistaInicio = '/'
         this.vistaRegistro = '/'
-        // this.login = '/'
+        
         
     }
 
     async start() {
         
         await conectDB();
+        
+        
         const UsuarioModel = getUserModel();
         const gzip = compression();
         
@@ -114,25 +122,30 @@ class Server {
             const { username, password, name } = req.body;
             
             if (!username) {
+
+                logger.log('error', 'El nombre de usuario es requerido')
                 return res.status(StatusCodes.BAD_REQUEST).json( {
                     error: `El nombre de usuario es requerido`
                 });
             }
-    
+            
             var isEmailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!isEmailRegExp.test(username)) {
+                logger.log('error', 'El nombre de usuario debe ser un correo electrónico')
                 return res.status(StatusCodes.BAD_REQUEST).json( {
                     error: 'El nombre de usuario debe ser un correo electrónico'
                 });
             }
     
             if (!password) {
+                logger.log('error', 'La contraseña es requerida')
                 return res.status(StatusCodes.BAD_REQUEST).json( {
                     error: 'La contraseña es requerida'
                 });
             }
     
             if (!name) {
+                logger.log('error', 'El nombre es requerido')
                 return res.status(StatusCodes.BAD_REQUEST).json( {
                     error: 'El nombre es requerido'
                 });
@@ -141,6 +154,7 @@ class Server {
             const usuarioExistente = await UsuarioModel.findOne({ username });
     
             if (usuarioExistente?.username) {
+                logger.log('error', 'El nombre de usuario no está disponible')
                 return res.status(StatusCodes.BAD_REQUEST).json( {
                     error: 'El nombre de usuario no está disponible'
                 });
@@ -157,6 +171,8 @@ class Server {
             })
     
             await nuevoUsuario.save();
+
+            logger.log('info', `Usuario ${username} registrado con exito `)
     
             res.json({
                 message: `Usuario ${username} registrado con exito` 
@@ -169,25 +185,39 @@ class Server {
     
             try {
                 if (!username) {
+                    logger.log('warn', 'El nombre de usuario es requerido')
                     throw new WebError('El nombre de usuario es requerido', StatusCodes.BAD_REQUEST)
                 }
     
                 if (!password) {
+                    logger.log('warn', 'La contraseña es requerida')
                     throw new WebError('La contraseña es requerida', StatusCodes.BAD_REQUEST)
                 }
     
                 user = await UsuarioModel.findOne({ username });
     
                 if (!user?.username) {
+                    logger.log('warn', 'El usuario no esta registrado')
                     throw new WebError('El usuario no esta registrado', StatusCodes.UNAUTHORIZED);
                 }
-    
+                
                 const hashedPassword = user.password;
                 const isCorrectPassword = await bcrypt.compare(password, hashedPassword)
-    
+                
                 if (!isCorrectPassword) {
+                    
+                    logger.log('error', 'El nombre de usuario o contraseña es incorrecta')
                     throw new WebError('El nombre de usuario o contraseña es incorrecta',  StatusCodes.UNAUTHORIZED);
                 }
+                // const levels = {
+                //     error: 0,
+                //     warn: 1,
+                //     info: 2,
+                //     http: 3,
+                //     verbose: 4,
+                //     debug: 5,
+                //     silly: 6
+                //   };
     
             } catch (error) {
                 return res.status(error.status).json({
@@ -277,6 +307,7 @@ class Server {
     
                 if (camposFaltantes.length) {
                     err = err + ' ' + camposFaltantes.join(', ');
+                    
                     return res.status(StatusCodes.BAD_REQUEST).json({error: err})
                 }
     
@@ -293,13 +324,25 @@ class Server {
             res.json({}); 
     
         })
+
+        this.app.get('*', (req, res) => {
+            logger.log('warn', `Ruta no encontrada ${req.url}`);
+            res.status(404).send(`Ruta no encontrada ${req.url}`)
+        })
     }
 
     listen() {
-        this.app.listen(this.port, () => {
-            console.log(`Servidor ejecutandose en el puerto ${this.port}`);
+         const servidor = this.app.listen(this.port, () => {
+            console.log('info',`Servidor ejecutandose en el puerto ${this.port}`);
+        })
+
+        servidor.on('error', (err) => {
+            logger.log('error', `Error al iniciar el server: ${err}`)
         })
     }
+
+    
+    
 }
 
 module.exports = Server;
