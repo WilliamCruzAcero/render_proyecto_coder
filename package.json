@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "echo 'app ecommerce'",
     "start": "node index.js",
     "profiling": "0x index.js",
     "test": "node tests/benchmark.js"
