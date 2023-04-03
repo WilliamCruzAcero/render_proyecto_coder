@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "profiling": "0x index.js",
+    "test": "node tests/benchmark.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "autocannon": "^7.10.0",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "dotenv": "^16.0.3",
@@ -20,5 +22,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.1",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0-31"
   }
 }

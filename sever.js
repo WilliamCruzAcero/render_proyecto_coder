@@ -8,6 +8,9 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 const compression = require('compression');
+const cluster = require('cluster');
+const {cpus} = require('os');
+
 
 const WebError = require('./models/webError')
 const { conectDB } = require('./conectDB/conectDB')
@@ -53,11 +56,11 @@ class Server {
         this.app.use(this.vistaInicio, require('./routes/ruta-vistaUsuario'))
         this.app.use(this.vistaRegistro, require('./routes/ruta-vistaRegistro'))
         // this.app.use(this.login, require('./routes/ruta-login'))
-      
-        this.app.get('/info', (req, res) => {
+        
     
+        this.app.get('/info', (req, res) => {
             
-                const serverInfo = 
+            const serverInfo = 
             {
                 path: process.cwd(),
                 plataforma: process.platform,
@@ -74,10 +77,9 @@ class Server {
                     info: serverInfo,
                     numNucleos
                 });
-                
             })
-        })  
-
+        })
+    
         this.app.get('/infogzip', gzip, (req, res) => {
     
             
@@ -102,20 +104,20 @@ class Server {
             })
         })
 
-        this.app.get('/api/random', (req, res) =>{
+        // this.app.get('/api/random', (req, res) =>{
             
-            const dataRandom = fork('./child/random.js')
-            dataRandom.send('start');
-            dataRandom.on('message', msg => {
+        //     const dataRandom = fork('./child/random.js')
+        //     dataRandom.send('start');
+        //     dataRandom.on('message', msg => {
                 
-                    let random = msg
-                    res.render('mostrar-random', {
-                    random
+        //             let random = msg
+        //             res.render('mostrar-random', {
+        //             random
                 
-                    });
+        //             });
                 
-            })
-        })        
+        //     })
+        // })        
         
         this.app.post('/user', async (req, res) => {
     
@@ -333,7 +335,7 @@ class Server {
 
     listen() {
          const servidor = this.app.listen(this.port, () => {
-            console.log('info',`Servidor ejecutandose en el puerto ${this.port}`);
+            console.log(`PID: ${process.pid}. Servidor ejecutandose en el puerto ${this.port}`);
         })
 
         servidor.on('error', (err) => {
